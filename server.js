@@ -137,14 +137,7 @@ app.get('/posts', (req, res) => {
   BlogPost
     .find()
     .then(posts => {
-      res.json(posts.map(post => {
-        return {
-          id: post._id,
-          author: post.authorName,
-          content: post.content,
-          title: post.title
-        };
-      }));
+      res.json(posts.map(post => post.serialize(false)));
     })
     .catch(err => {
       console.error(err);
@@ -157,13 +150,7 @@ app.get('/posts/:id', (req, res) => {
   BlogPost
     .findById(req.params.id)
     .then(post => {
-      res.json({
-        id: post._id,
-        author: post.authorName,
-        content: post.content,
-        title: post.title,
-        comments: post.comments
-      });
+      res.json(post.serialize());
     })
     .catch(err => {
       console.error(err);

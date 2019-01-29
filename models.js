@@ -35,14 +35,17 @@ blogPostSchema.virtual('authorName').get(function() {
   return `${this.author.firstName} ${this.author.lastName}`.trim();
 });
 
-blogPostSchema.methods.serialize = function() {
-  return {
+blogPostSchema.methods.serialize = function(includeComments = true) {
+  const serialized = {
     id: this._id,
     author: this.authorName,
     content: this.content,
     title: this.title,
-    comments: this.comments
   };
+  if (includeComments) {
+    serialized.comments = this.comments;
+  }
+  return serialized;
 };
 
 var Author = mongoose.model('Author', authorSchema);
